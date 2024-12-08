@@ -23,7 +23,7 @@ except NameError as exc:
         f'`{type(exc).__name__}: {exc}`'
     )
 except ImportError as exc:
-    if any(obj in exc.name for obj in ['models', 'URLMap']):
+    if any(obj in exc.name for obj in ['models', 'URLMap']):  # type: ignore
         raise AssertionError('В файле `models` не найдена модель `URLMap`.')
     raise AssertionError(
         'При попытке запуска приложения вознакло исключение: '
