@@ -7,13 +7,13 @@ from . import app, db
 
 class CustomAPIError(Exception):
     """Кастомное исключение для API с поддержкой статуса ошибки."""
-    status_code = HTTPStatus.BAD_REQUEST
 
-    def __init__(self, message, status_code=None):
+    def __init__(self, message, status_code=HTTPStatus.BAD_REQUEST):
         super().__init__()
         self.message = message
-        if status_code is not None:
-            self.status_code = status_code
+        self.status_code = (
+            status_code if status_code is not None else HTTPStatus.BAD_REQUEST
+        )
 
     def to_dict(self):
         """Возвращает словарь с сообщением об ошибке."""
