@@ -16,17 +16,16 @@ def create_short_link():
         raise CustomAPIError('Отсутствует тело запроса')
     elif 'url' not in data:
         raise CustomAPIError('"url" является обязательным полем!')
-    if data.get('custom_id'):
-        if len(data['custom_id']) > 16 or not check_short(data['custom_id']):
+    if custom_id := data.get('custom_id'):
+        if len(custom_id) > 16 or not check_short(custom_id):
             raise CustomAPIError(
                 'Указано недопустимое имя для короткой ссылки')
-        elif URLMap.query.filter_by(
-            short=data['custom_id']
-        ).first() is not None:
+        elif URLMap.query.filter_by(short=custom_id).first() is not None:
             raise CustomAPIError(
                 'Предложенный вариант короткой ссылки уже существует.')
     else:
-        data['custom_id'] = get_unique_short_id()
+        custom_id = get_unique_short_id()
+        data['custom_id'] = custom_id
     url_map = URLMap()
     url_map.from_dict(data)
     db.session.add(url_map)
